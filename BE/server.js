@@ -36,6 +36,8 @@ app.use("/api/suppliers", supplierRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/categories", require("./routes/categories"));
 app.use("/api/products", require("./routes/products"));
+app.use("/api/orders", require("./routes/orders"));
+app.use("/api/vouchers", require("./routes/vouchers"));
 
 // Serve ảnh tĩnh
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
