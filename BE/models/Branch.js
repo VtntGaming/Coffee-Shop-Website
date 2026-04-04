@@ -24,11 +24,11 @@ const branchSchema = new mongoose.Schema({
     match: [/^(0[3|5|7|8|9])+([0-9]{8})$/, 'Số điện thoại không hợp lệ']
   },
   openTime: {
-    type: String,    // VD: "07:00"
+    type: String,
     default: '07:00'
   },
   closeTime: {
-    type: String,    // VD: "22:00"
+    type: String,
     default: '22:00'
   },
   isActive: {
@@ -37,13 +37,12 @@ const branchSchema = new mongoose.Schema({
   },
   manager: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'      // Quản lý chi nhánh (từ Người 1)
+    ref: 'User'
   }
 }, {
   timestamps: true
 });
 
-// Tự động tạo slug từ name
 branchSchema.pre('save', async function() {
   if (this.isModified('name')) {
     this.slug = slugify(this.name, { lower: true, locale: 'vi' });
