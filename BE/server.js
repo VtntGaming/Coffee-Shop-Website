@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const connectDB = require("./config/db");
 
 // Import routes
@@ -25,6 +26,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/categories", require("./routes/categories"));
+app.use("/api/products", require("./routes/products"));
+
+// Serve ảnh tĩnh
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Route mặc định
 app.get("/", (req, res) => {
