@@ -1,0 +1,146 @@
+COFFEE SHOP WEBSITE - FRONTEND DESIGN RULES
+===========================================
+
+1. MUC TIEU CHUNG
+- Front-end phai hien dai, sach se, de mo rong va de maintain.
+- Uu tien React + TypeScript, tuyet doi khong viet JavaScript thuan cho source chinh.
+- Giao dien phai phu hop voi mo hinh quan ly quan ca phe: than thien, ro rang, thao tac nhanh.
+
+2. DINH HUONG THIET KE UI
+- Phong cach: modern, clean, warm, professional.
+- Cam hung mau sac: coffee / cafe / neutral.
+- Uu tien trai nghiem quan tri (dashboard) nhung van co the mo rong cho trang khach hang.
+- Khong lam giao dien qua roi, qua nhieu mau, qua nhieu hieu ung.
+
+3. MAU SAC KHUYEN NGHI
+- Mau chinh: nau cafe, cam dat, kem, trang, xam dam.
+- Goi y palette:
+  + Primary: #8B5E3C
+  + Secondary: #C97C3D
+  + Accent: #F4E7DA
+  + Background: #FFFaf5 hoac #F8F5F2
+  + Text: #1F2937
+  + Success: #16A34A
+  + Warning: #D97706
+  + Error: #DC2626
+- Tat ca team nen dung cung 1 he thong mau, khong tu y moi man hinh 1 kieu.
+
+4. TYPOGRAPHY
+- Font chu de xuat: Inter, Be Vietnam Pro, hoac Segoe UI.
+- Tieu de ro rang, do dam vua phai.
+- Kich thuoc goi y:
+  + H1: 32-40px
+  + H2: 24-28px
+  + H3: 18-22px
+  + Body: 14-16px
+  + Caption: 12-13px
+- Khong dung qua nhieu loai font trong cung 1 project.
+
+5. BO CUC CHUNG
+- Moi trang nen co bo cuc on dinh:
+  + Header
+  + Sidebar (neu la trang admin / dashboard)
+  + Main content
+  + Footer don gian neu can
+- Khoang trang (spacing) phai dong nhat: uu tien 8px / 12px / 16px / 24px / 32px.
+- Card, table, form, modal phai cung style bo goc va shadow.
+
+6. CAC TRANG NEN CO TRONG GIAI DOAN DAU
+- Login
+- Dashboard
+- Quan ly nguoi dung
+- Quan ly chi nhanh / ban
+- Menu / san pham
+- Kho nguyen lieu
+- Don hang
+- Voucher / khuyen mai
+- Trang 404 / empty state / loading state
+
+7. COMPONENT RULES
+- Uu tien tach component nho, tai su dung duoc.
+- Nen co cac component chung:
+  + Button
+  + Input
+  + Select
+  + Card
+  + Modal
+  + Table
+  + Badge
+  + EmptyState
+  + LoadingSpinner
+- Component phai co ten ro nghia, khong dat ten mo ho.
+- Khong viet logic qua lon trong 1 file component.
+
+8. RESPONSIVE DESIGN
+- Giao dien phai dung tot tren laptop truoc, sau do toi uu cho tablet va mobile.
+- Breakpoint goi y:
+  + Mobile: < 640px
+  + Tablet: 640px - 1023px
+  + Desktop: >= 1024px
+- Bang du lieu lon can co xu ly responsive hop ly, tranh vo layout.
+
+9. UX RULES
+- Nut bam quan trong phai de thay, ro mau, de click.
+- Form phai co label day du, thong bao loi ro rang.
+- Trang thai loading / empty / error bat buoc phai co.
+- Xoa / cap nhat du lieu phai co xac nhan neu la thao tac quan trong.
+- Dat uu tien toc do thao tac cho nhan vien va admin.
+
+10. ACCESSIBILITY
+- Mau chu va nen phai du do tuong phan.
+- Nut, input, link phai co trang thai hover / focus / disabled.
+- Khong chi phan biet trang thai bang mau sac duy nhat.
+- Anh, icon quan trong nen co text ho tro neu can.
+
+11. ICON & HINH ANH
+- Icon phai dong bo cung 1 bo (VD: lucide-react, react-icons...).
+- Khong dung icon qua nhieu kieu khac nhau.
+- Anh san pham nen co ti le thong nhat, uu tien 1:1 hoac 4:3.
+
+12. QUY TAC CODE FRONT-END
+- Dung TypeScript cho tat ca component, page, hook, utility.
+- Tach ro:
+  + pages/
+  + components/
+  + layouts/
+  + services/
+  + types/
+  + hooks/
+  + assets/
+- Khong hard-code du lieu neu co the tach ra constant/mock data.
+- Su dung ten bien, ten component bang tieng Anh de de maintain.
+- UI text co the viet tieng Viet neu theo nghiep vu du an.
+
+13. QUY TAC DAT TEN
+- Component: PascalCase
+  Vi du: ProductCard.tsx, DashboardLayout.tsx
+- Hook: camelCase va bat dau bang use
+  Vi du: useAuth.ts, useProducts.ts
+- CSS class / style naming phai thong nhat, de doc.
+
+14. KET NOI BACKEND SAU NAY
+- Front-end phai de san kha nang ket noi API trong folder services/.
+- Moi module nen co file service rieng.
+- Xu ly loading, error, success phai ro rang.
+- Chuan bi san kieu du lieu (types/interfaces) theo backend.
+
+15. KHONG DUOC LAM
+- Khong dung JavaScript cho source chinh.
+- Khong copy nhieu style inline lung tung.
+- Khong de moi page mot style khac nhau hoan toan.
+- Khong viet component vua UI vua xu ly qua nhieu nghiep vu phuc tap.
+- Khong merge code len neu giao dien vo layout hoac mau sac lech he thong.
+
+16. NGUYEN TAC LAM VIEC NHOM
+- Truoc khi them man hinh moi, can bam theo rule nay.
+- Neu can sua design system, phai thong nhat voi ca team.
+- Uu tien tai su dung component thay vi viet lai tu dau.
+- Moi pull request front-end nen co anh chup man hinh hoac mo ta UI da thay doi.
+
+17. HUONG PHAT TRIEN DE XUAT
+- Phase 1: dung layout, them pages co ban, dung du lieu mau.
+- Phase 2: them router, state management nhe, service API.
+- Phase 3: ket noi that voi backend va toi uu UX.
+
+Tai lieu nay la rule chung cho toan bo dev front-end trong thu muc FE.
+Tat ca implementation moi nen tuan theo cac quy tac tren.

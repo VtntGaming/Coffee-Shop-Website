@@ -54,7 +54,7 @@ function App() {
       <header className="hero">
         <div className="hero__content">
           <span className="hero__eyebrow">Coffee Shop Website</span>
-          <h1>Front-end React TypeScript cơ bản cho hệ thống quản lý quán cà phê</h1>
+          <h1>Coffee Shop Website</h1>
           <p>
             Đây là giao diện khởi tạo ban đầu trong thư mục <strong>FE</strong>, sẵn sàng để mở
             rộng thêm router, API và các màn hình nghiệp vụ sau này.
