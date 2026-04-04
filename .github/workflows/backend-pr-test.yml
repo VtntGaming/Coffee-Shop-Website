@@ -1,0 +1,53 @@
+name: Backend PR Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: BE
+
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.adminCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create CI environment file
+        run: |
+          cat <<EOF > .env
+          PORT=3000
+          NODE_ENV=test
+          MONGODB_URI=mongodb://127.0.0.1:27017/coffee_shop_test
+          JWT_SECRET=github_actions_secret_key
+          JWT_EXPIRES_IN=7d
+          FRONTEND_URL=http://localhost:3000
+          EOF
+
+      - name: Seed database
+        run: npm run seed
+
+      - name: Run backend smoke test
+        run: npm test
