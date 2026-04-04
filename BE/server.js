@@ -7,6 +7,10 @@ const connectDB = require("./config/db");
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+// Người 4: Kho + Nguyên liệu
+const ingredientRoutes = require('./routes/ingredients');
+const supplierRoutes = require('./routes/suppliers');
+const inventoryRoutes = require('./routes/inventory');
 
 // Khởi tạo app Express
 const app = express();
@@ -25,6 +29,10 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+// Người 4: Kho + Nguyên liệu
+app.use("/api/ingredients", ingredientRoutes);
+app.use("/api/suppliers", supplierRoutes);
+app.use("/api/inventory", inventoryRoutes);
 
 // Route mặc định
 app.get("/", (req, res) => {
