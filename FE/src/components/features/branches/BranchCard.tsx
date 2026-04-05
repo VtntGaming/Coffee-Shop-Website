@@ -39,11 +39,6 @@ export function BranchCard({ branch, onEdit, onDelete, children }: BranchCardPro
             <strong>Điện thoại:</strong> {branch.phone}
           </p>
         )}
-        {branch.email && (
-          <p className="branch-card__info">
-            <strong>Email:</strong> {branch.email}
-          </p>
-        )}
         {branch.openTime && (
           <p className="branch-card__info">
             <strong>Giờ mở cửa:</strong> {branch.openTime} - {branch.closeTime}
