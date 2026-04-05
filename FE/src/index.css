@@ -1,17 +1,32 @@
+/**
+ * ============================================
+ * GLOBAL STYLES — Design system cho toàn app
+ *
+ * Màu sắc theo coffee shop theme
+ * ============================================
+ */
+
+/* === CSS Variables — Design tokens === */
 :root {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: #f3f4f6;
-  background: #111827;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Màu chính */
+  --color-primary: #8B5E3C;     /* Nâu cà phê */
+  --color-secondary: #C97C3D;   /* Cam đất */
+  --color-accent: #F4E7DA;      /* Kem nhạt */
+
+  /* Nền & text */
+  --color-bg: #F8F5F2;          /* Beige nhạt */
+  --color-text: #1F2937;        /* Xám đậm */
+  --color-border: #E5DDD5;      /* Nâu nhạt */
+
+  /* Trạng thái */
+  --color-success: #16A34A;     /* Xanh lá */
+  --color-warning: #D97706;     /* Cam */
+  --color-error: #DC2626;       /* Đỏ */
 }
 
-* {
-  box-sizing: border-box;
+/* === Reset & Base === */
+*, *::before, *::after {
+  box-sizing: border-box; /* padding không làm tràn width */
 }
 
 html {
@@ -20,182 +35,60 @@ html {
 
 body {
   margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(249, 115, 22, 0.28), transparent 0, transparent 34%),
-    linear-gradient(135deg, #111827 0%, #1f2937 55%, #0f172a 100%);
+  font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+}
+
+p { margin: 0; }
 
 a {
-  color: inherit;
+  color: var(--color-primary);
   text-decoration: none;
 }
-
-button {
-  font: inherit;
+a:hover {
+  text-decoration: underline;
 }
 
-#root {
-  width: 100%;
+button, input, select, textarea {
+  font-family: inherit;
 }
 
-.app-shell {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 20px 48px;
+/* === Scrollbar tùy chỉnh === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
 }
 
-.hero {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 24px;
-  align-items: stretch;
-}
-
-.hero__content,
-.hero__panel,
-.module-card,
-.stat-card,
-.section {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(17, 24, 39, 0.72);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
-}
-
-.hero__content,
-.hero__panel {
-  border-radius: 24px;
-  padding: 28px;
-}
-
-.hero__eyebrow,
-.section__tag,
-.module-card__badge,
-.section__hint {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(249, 115, 22, 0.14);
-  color: #fdba74;
-  font-size: 0.85rem;
-}
-
-.hero h1 {
-  margin: 14px 0 12px;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1.15;
-}
-
-.hero p,
-.section__text,
-.module-card p {
-  color: #d1d5db;
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.hero__actions button,
-.hero__actions a {
-  padding: 12px 18px;
-  border-radius: 12px;
-  border: none;
-}
-
-.hero__actions button {
-  background: linear-gradient(135deg, #f97316, #fb923c);
-  color: white;
-  cursor: pointer;
-}
-
-.hero__actions a {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.panel__title {
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: #fdba74;
-  font-weight: 700;
-}
-
-.stats-grid {
-  display: grid;
-  gap: 12px;
-}
-
-.stat-card {
-  padding: 16px;
-  border-radius: 16px;
-}
-
-.stat-card span {
-  display: block;
-  color: #9ca3af;
-  font-size: 0.9rem;
-}
-
-.stat-card strong {
-  display: block;
-  margin-top: 8px;
-  font-size: 1.15rem;
-}
-
-.section {
-  margin-top: 24px;
-  padding: 24px;
-  border-radius: 20px;
-}
-
-.section--intro {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  align-items: center;
-}
-
-.section__header {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.section h2 {
-  margin: 10px 0 0;
-}
-
-.module-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-}
-
-.module-card {
-  padding: 20px;
-  border-radius: 18px;
-}
-
-.module-card h3 {
-  margin: 14px 0 10px;
-}
-
-@media (max-width: 860px) {
-  .hero,
-  .section--intro {
-    grid-template-columns: 1fr;
-  }
-
-  .app-shell {
-    padding-inline: 14px;
-  }
+/* === Utility — SR only (screen reader) === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
