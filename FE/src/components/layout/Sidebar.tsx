@@ -12,7 +12,7 @@ import {
   Coffee,
   LayoutDashboard,
   Store,
-  UtensilsCrossed,
+  Tag,
   Package,
   ShoppingCart,
   Ticket,
@@ -43,7 +43,8 @@ interface SidebarProps {
 const navItems: NavItem[] = [
   { label: 'Dashboard', to: '/admin', icon: <LayoutDashboard size={20} /> },
   { label: 'Chi nhánh & Bàn', to: '/admin/branches', icon: <Store size={20} /> },
-  { label: 'Menu & Sản phẩm', to: '/admin/menu', icon: <UtensilsCrossed size={20} /> },
+  { label: 'Danh mục món', to: '/admin/categories', icon: <Tag size={20} /> },
+  { label: 'Sản phẩm', to: '/admin/products', icon: <Coffee size={20} /> },
   { label: 'Kho nguyên liệu', to: '/admin/inventory', icon: <Package size={20} /> },
   { label: 'Đơn hàng', to: '/admin/orders', icon: <ShoppingCart size={20} /> },
   { label: 'Voucher', to: '/admin/vouchers', icon: <Ticket size={20} /> },

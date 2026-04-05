@@ -6,149 +6,235 @@ import type {
   Supplier,
 } from '../types/inventory';
 
-const mockBranches: BranchOption[] = [
-  { id: 'branch-1', name: 'Chi nhánh Quận 1' },
-  { id: 'branch-2', name: 'Chi nhánh Quận 7' },
-  { id: 'branch-3', name: 'Chi nhánh Thủ Đức' },
-];
+import apiClient from './apiClient';
 
-const mockSuppliers: Supplier[] = [
-  {
-    id: 'sup-1',
-    name: 'Nông trại Arabica Đà Lạt',
-    contactName: 'Anh Hiếu',
-    phone: '0909123456',
-    email: 'hieu@arabicafarm.vn',
-    branchIds: ['branch-1', 'branch-2'],
-    leadTimeDays: 2,
-    status: 'active',
-  },
-  {
-    id: 'sup-2',
-    name: 'Sữa Tươi Việt Nam',
-    contactName: 'Chị Mai',
-    phone: '0911222333',
-    email: 'mai@freshmilk.vn',
-    branchIds: ['branch-1', 'branch-2', 'branch-3'],
-    leadTimeDays: 1,
-    status: 'active',
-  },
-  {
-    id: 'sup-3',
-    name: 'Ngọt Nguồn Trading',
-    contactName: 'Anh Long',
-    phone: '0933444555',
-    email: 'long@sweetsource.vn',
-    branchIds: ['branch-3'],
-    leadTimeDays: 3,
-    status: 'inactive',
-  },
-];
+interface ApiEnvelope<T> {
+  success: boolean;
+  data: T;
+  count?: number;
+  total?: number;
+  page?: number;
+  totalPages?: number;
+  message?: string;
+}
 
-const mockIngredients: Ingredient[] = [
-  {
-    id: 'ing-1',
-    name: 'Hạt cà phê Arabica',
-    category: 'Hạt cà phê',
-    unit: 'kg',
-    minStock: 8,
-    supplierId: 'sup-1',
-    costPerUnit: 235000,
-    status: 'active',
-  },
-  {
-    id: 'ing-2',
-    name: 'Sữa tươi không đường',
-    category: 'Sữa',
-    unit: 'lít',
-    minStock: 15,
-    supplierId: 'sup-2',
-    costPerUnit: 37000,
-    status: 'active',
-  },
-  {
-    id: 'ing-3',
-    name: 'Siro caramel',
-    category: 'Siro',
-    unit: 'chai',
-    minStock: 10,
-    supplierId: 'sup-3',
-    costPerUnit: 89000,
-    status: 'inactive',
-  },
-  {
-    id: 'ing-4',
-    name: 'Bánh cookie',
-    category: 'Bánh ngọt',
-    unit: 'hộp',
-    minStock: 6,
-    supplierId: 'sup-3',
-    costPerUnit: 52000,
-    status: 'active',
-  },
-];
+interface BackendIngredient {
+  _id: string;
+  name: string;
+  unit: string;
+  description?: string;
+  minStock?: number;
+  isActive?: boolean;
+}
 
-const mockInventory: InventoryItem[] = [
-  {
-    id: 'inv-1',
-    branchId: 'branch-1',
-    ingredientId: 'ing-1',
-    inStock: 22,
-    reserved: 5,
-    incoming: 0,
-    lastRestockedAt: '2026-04-01T09:00:00.000Z',
-  },
-  {
-    id: 'inv-2',
-    branchId: 'branch-1',
-    ingredientId: 'ing-2',
-    inStock: 10,
-    reserved: 2,
-    incoming: 20,
-    lastRestockedAt: '2026-04-03T13:25:00.000Z',
-  },
-  {
-    id: 'inv-3',
-    branchId: 'branch-2',
-    ingredientId: 'ing-1',
-    inStock: 6,
-    reserved: 1,
-    incoming: 10,
-    lastRestockedAt: '2026-04-02T08:45:00.000Z',
-  },
-  {
-    id: 'inv-4',
-    branchId: 'branch-3',
-    ingredientId: 'ing-3',
-    inStock: 2,
-    reserved: 1,
-    incoming: 0,
-    lastRestockedAt: '2026-03-30T10:10:00.000Z',
-  },
-  {
-    id: 'inv-5',
-    branchId: 'branch-3',
-    ingredientId: 'ing-4',
-    inStock: 0,
-    reserved: 0,
-    incoming: 12,
-    lastRestockedAt: '2026-03-28T15:40:00.000Z',
-  },
-];
+interface BackendSupplier {
+  _id: string;
+  name: string;
+  contactPerson?: string;
+  phone: string;
+  email?: string;
+  supplies?: Array<{ _id?: string } | string>;
+  isActive?: boolean;
+}
 
-function delay(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
+interface BackendBranch {
+  _id: string;
+  name: string;
+}
+
+type BackendReference = string | { _id?: string; name?: string };
+
+interface BackendInventoryHistory {
+  _id: string;
+  ingredient: BackendReference;
+  branch: BackendReference;
+  supplier?: BackendReference;
+  type: 'import' | 'export' | 'adjust';
+  quantity: number;
+  unitPrice?: number;
+  createdAt: string;
+}
+
+function getRefId(value: BackendReference | undefined): string {
+  if (!value) {
+    return '';
+  }
+
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  return value._id ?? '';
+}
+
+function getRefName(value: BackendReference | undefined): string {
+  if (!value || typeof value === 'string') {
+    return '';
+  }
+
+  return value.name ?? '';
+}
+
+async function fetchAllHistory(): Promise<BackendInventoryHistory[]> {
+  const firstPage = await apiClient.get<ApiEnvelope<BackendInventoryHistory[]>>('/inventory/history', {
+    params: { page: 1, limit: 200 },
   });
+
+  const allRows = [...(firstPage.data.data ?? [])];
+  const totalPages = firstPage.data.totalPages ?? 1;
+
+  if (totalPages <= 1) {
+    return allRows;
+  }
+
+  const requests: Array<Promise<{ data: ApiEnvelope<BackendInventoryHistory[]> }>> = [];
+  for (let page = 2; page <= totalPages; page += 1) {
+    requests.push(
+      apiClient.get<ApiEnvelope<BackendInventoryHistory[]>>('/inventory/history', {
+        params: { page, limit: 200 },
+      }),
+    );
+  }
+
+  const pages = await Promise.all(requests);
+  pages.forEach((response) => {
+    allRows.push(...(response.data.data ?? []));
+  });
+
+  return allRows;
 }
 
 export async function fetchInventoryModuleData(): Promise<InventoryModuleData> {
-  await delay(500);
+  const [ingredientsRes, suppliersRes, branchesRes, historyRows] = await Promise.all([
+    apiClient.get<ApiEnvelope<BackendIngredient[]>>('/ingredients'),
+    apiClient.get<ApiEnvelope<BackendSupplier[]>>('/suppliers').catch(() => null),
+    apiClient.get<ApiEnvelope<BackendBranch[]>>('/branches').catch(() => null),
+    fetchAllHistory().catch(() => []),
+  ]);
+
+  const backendIngredients = ingredientsRes.data.data ?? [];
+  const backendSuppliers = suppliersRes?.data?.data ?? [];
+
+  const branchMap = new Map<string, string>();
+  (branchesRes?.data?.data ?? []).forEach((item) => {
+    branchMap.set(item._id, item.name);
+  });
+  historyRows.forEach((row) => {
+    const branchId = getRefId(row.branch);
+    const branchName = getRefName(row.branch);
+    if (!branchId) {
+      return;
+    }
+
+    if (!branchMap.has(branchId)) {
+      branchMap.set(branchId, branchName || 'Chi nhánh');
+    }
+  });
+
+  const branches: BranchOption[] = Array.from(branchMap.entries()).map(([id, name]) => ({
+    id,
+    name,
+  }));
+
+  const allBranchIds = branches.map((item) => item.id);
+
+  const supplierByIngredient = new Map<string, string>();
+  const suppliers: Supplier[] = backendSuppliers.map((item) => {
+    (item.supplies ?? []).forEach((supply) => {
+      const ingredientId = typeof supply === 'string' ? supply : (supply._id ?? '');
+      if (ingredientId && !supplierByIngredient.has(ingredientId)) {
+        supplierByIngredient.set(ingredientId, item._id);
+      }
+    });
+
+    return {
+      id: item._id,
+      name: item.name,
+      contactName: item.contactPerson ?? '-',
+      phone: item.phone,
+      email: item.email ?? '-',
+      branchIds: [...allBranchIds],
+      leadTimeDays: 1,
+      status: item.isActive === false ? 'inactive' : 'active',
+    };
+  });
+
+  const latestImportPriceMap = new Map<string, { price: number; createdAt: number }>();
+  historyRows.forEach((row) => {
+    if (row.type !== 'import') {
+      return;
+    }
+
+    const ingredientId = getRefId(row.ingredient);
+    if (!ingredientId) {
+      return;
+    }
+
+    const createdAtTime = new Date(row.createdAt).getTime();
+    const prev = latestImportPriceMap.get(ingredientId);
+    if (!prev || createdAtTime > prev.createdAt) {
+      latestImportPriceMap.set(ingredientId, {
+        price: row.unitPrice ?? 0,
+        createdAt: createdAtTime,
+      });
+    }
+  });
+
+  const ingredients: Ingredient[] = backendIngredients.map((item) => ({
+    id: item._id,
+    name: item.name,
+    category: item.description?.trim() || 'Nguyên liệu',
+    unit: item.unit,
+    minStock: item.minStock ?? 0,
+    supplierId: supplierByIngredient.get(item._id) ?? '',
+    costPerUnit: latestImportPriceMap.get(item._id)?.price ?? 0,
+    status: item.isActive === false ? 'inactive' : 'active',
+  }));
+
+  const groupedInventory = new Map<string, InventoryItem>();
+  historyRows.forEach((row) => {
+    const ingredientId = getRefId(row.ingredient);
+    const branchId = getRefId(row.branch);
+    if (!ingredientId || !branchId) {
+      return;
+    }
+
+    const key = `${branchId}:${ingredientId}`;
+    const existing = groupedInventory.get(key);
+    const current = existing ?? {
+      id: key,
+      branchId,
+      ingredientId,
+      inStock: 0,
+      reserved: 0,
+      incoming: 0,
+      lastRestockedAt: row.createdAt,
+    };
+
+    if (row.type === 'import') {
+      current.inStock += row.quantity;
+    } else if (row.type === 'export') {
+      current.inStock -= row.quantity;
+    } else {
+      current.inStock += row.quantity;
+    }
+
+    if (new Date(row.createdAt).getTime() > new Date(current.lastRestockedAt).getTime()) {
+      current.lastRestockedAt = row.createdAt;
+    }
+
+    groupedInventory.set(key, current);
+  });
+
+  const inventory = Array.from(groupedInventory.values()).map((item) => ({
+    ...item,
+    inStock: Math.max(item.inStock, 0),
+  }));
 
   return {
-    branches: mockBranches.map((item) => ({ ...item })),
-    ingredients: mockIngredients.map((item) => ({ ...item })),
-    suppliers: mockSuppliers.map((item) => ({ ...item, branchIds: [...item.branchIds] })),
-    inventory: mockInventory.map((item) => ({ ...item })),
+    branches,
+    ingredients,
+    suppliers,
+    inventory,
   };
 }
