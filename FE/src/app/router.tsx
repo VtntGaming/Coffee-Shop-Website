@@ -29,6 +29,7 @@ import { InventoryManagementPage } from '../pages/inventory/InventoryManagementP
 import { OrderListPage } from '../pages/orders/OrderListPage';
 import { CreateOrderPage } from '../pages/orders/CreateOrderPage';
 import { VoucherListPage } from '../pages/vouchers/VoucherListPage';
+import { UserManagementPage } from '../pages/users/UserManagementPage';
 
 /**
  * Component bảo vệ route — chặn người chưa đăng nhập
@@ -103,6 +104,7 @@ const routes: RouteObject[] = [
       { path: '/admin/orders', element: <OrderListPage /> },
       { path: '/admin/orders/create', element: <CreateOrderPage /> },
       { path: '/admin/vouchers', element: <VoucherListPage /> },
+      { path: '/admin/users', element: <UserManagementPage /> },
     ],
   },
   { path: '*', element: <NotFoundPage /> },
