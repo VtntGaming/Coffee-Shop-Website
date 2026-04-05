@@ -53,6 +53,12 @@
   align-items: center;
 }
 
+.home-nav__user {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-light);
+}
+
 .home-nav__login {
   font-size: 14px;
   font-weight: 500;
@@ -60,6 +66,12 @@
   text-decoration: none;
   padding: 8px 16px;
   border-radius: 8px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transition: background-color 0.2s;
 }
 .home-nav__login:hover {
@@ -75,6 +87,9 @@
   text-decoration: none;
   padding: 8px 20px;
   border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   transition: background-color 0.2s;
 }
 .home-nav__cta:hover {

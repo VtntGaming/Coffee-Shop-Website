@@ -26,6 +26,9 @@ import { BranchListPage } from '../pages/branches/BranchListPage';
 import { CategoryListPage } from '../pages/categories/CategoryListPage';
 import { ProductListPage } from '../pages/products/ProductListPage';
 import { InventoryManagementPage } from '../pages/inventory/InventoryManagementPage';
+import { OrderListPage } from '../pages/orders/OrderListPage';
+import { CreateOrderPage } from '../pages/orders/CreateOrderPage';
+import { VoucherListPage } from '../pages/vouchers/VoucherListPage';
 
 /**
  * Component bảo vệ route — chặn người chưa đăng nhập
@@ -97,6 +100,9 @@ const routes: RouteObject[] = [
       { path: '/admin/categories', element: <CategoryListPage /> },
       { path: '/admin/products', element: <ProductListPage /> },
       { path: '/admin/inventory', element: <InventoryManagementPage /> },
+      { path: '/admin/orders', element: <OrderListPage /> },
+      { path: '/admin/orders/create', element: <CreateOrderPage /> },
+      { path: '/admin/vouchers', element: <VoucherListPage /> },
     ],
   },
   { path: '*', element: <NotFoundPage /> },
