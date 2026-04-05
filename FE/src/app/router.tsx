@@ -22,6 +22,7 @@ import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { HomePage } from '../pages/home/HomePage';
+import { InventoryManagementPage } from '../pages/inventory/InventoryManagementPage';
 
 /**
  * Component bảo vệ route — chặn người chưa đăng nhập
@@ -94,6 +95,7 @@ const routes: RouteObject[] = [
     element: <ProtectedRoute />,
     children: [
       { path: '/admin', element: <DashboardPage /> },
+      { path: '/admin/inventory', element: <InventoryManagementPage /> },
       // Các trang admin khác sẽ thêm vào đây
     ],
   },
