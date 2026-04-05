@@ -6,6 +6,7 @@
  * ============================================
  */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { Sidebar } from '../components/layout/Sidebar';
 import { useAuth } from '../hooks/useAuth';
@@ -21,10 +22,19 @@ interface AdminLayoutProps {
  * Tự động hiện/ẩn sidebar trên mobile
  */
 export function AdminLayout({ children }: AdminLayoutProps) {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
 
   // Sidebar mở/đóng trên mobile
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  /**
+   * Đăng xuất — xóa auth data rồi chuyển về trang home công khai
+   */
+  function handleLogout() {
+    logout();
+    navigate('/'); // Chuyển về trang chủ
+  }
 
   return (
     <div className="admin-layout">
@@ -58,7 +68,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             </div>
             <button
               className="admin-header__logout"
-              onClick={logout}
+              onClick={handleLogout}
               title="Đăng xuất"
             >
               Đăng xuất

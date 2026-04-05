@@ -33,7 +33,7 @@ interface DataTableProps<T> {
   emptyText?: string;
 }
 
-export function DataTable<T extends Record<string, unknown>>({
+export function DataTable<T extends object>({
   columns,
   data,
   loading = false,
@@ -72,7 +72,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 {columns.map((col) => (
                   <td key={col.key}>
                     {/* Ưu tiên dùng render tùy chỉnh, không thì lấy trực tiếp */}
-                    {col.render ? col.render(row, index) : (row[col.key] as ReactNode)}
+                    {col.render ? col.render(row, index) : (row as Record<string, unknown>)[col.key] as ReactNode}
                   </td>
                 ))}
               </tr>
