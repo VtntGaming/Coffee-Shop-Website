@@ -1,0 +1,65 @@
+/* ============================================
+   DATA TABLE STYLES — quy tắc thiết kế bảng
+   ============================================ */
+
+.data-table-wrapper {
+  overflow-x: auto; /* Cuộn ngang khi bảng quá rộng */
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+/* Header */
+.data-table thead th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Body rows */
+.data-table tbody td {
+  padding: 14px 16px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:hover {
+  background-color: #fafaf8;
+}
+
+/* Loading state */
+.data-table__loading {
+  text-align: center;
+  padding: 40px !important;
+  color: #888;
+}
+
+.data-table__spinner {
+  color: var(--color-primary);
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Empty state */
+.data-table__empty {
+  text-align: center;
+  padding: 40px !important;
+  color: #aaa;
+  font-style: italic;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

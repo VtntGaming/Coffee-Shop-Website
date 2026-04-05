@@ -1,0 +1,70 @@
+/* ============================================
+   INPUT STYLES — quy tắc thiết kế ô nhập liệu
+   ============================================ */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* Dấu * bắt buộc */
+.input-group__required {
+  color: var(--color-error);
+  margin-left: 4px;
+}
+
+/* Ô nhập */
+.input-group__input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box; /* padding không làm tràn width */
+}
+
+.input-group__input::placeholder {
+  color: #aaa;
+}
+
+/* Focus — viền nổi bật */
+.input-group__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.12);
+}
+
+/* Disable — nền xám */
+.input-group__input:disabled {
+  background-color: var(--color-bg);
+  cursor: not-allowed;
+}
+
+/* Trạng thái lỗi — viền đỏ */
+.input-group--error .input-group__input {
+  border-color: var(--color-error);
+}
+.input-group--error .input-group__input:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+/* Text lỗi / gợi ý */
+.input-group__error {
+  font-size: 13px;
+  color: var(--color-error);
+}
+.input-group__hint {
+  font-size: 13px;
+  color: #888;
+}

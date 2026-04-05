@@ -1,0 +1,90 @@
+/**
+ * ============================================
+ * BRANCH CARD — CSS Styles
+ * ============================================
+ */
+
+.branch-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.branch-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+}
+
+.branch-card__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.branch-card__name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  flex: 1;
+}
+
+.branch-card__status {
+  flex-shrink: 0;
+}
+
+.branch-card__content {
+  padding: 16px;
+  flex: 1;
+}
+
+.branch-card__info {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.branch-card__info:last-child {
+  margin-bottom: 0;
+}
+
+.branch-card__info strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.branch-card__custom {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.branch-card__actions {
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--color-border);
+  background-color: #FAFAF9;
+}
+
+.branch-card__actions button {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .branch-card__actions {
+    flex-direction: column;
+  }
+
+  .branch-card__actions button {
+    width: 100%;
+  }
+}

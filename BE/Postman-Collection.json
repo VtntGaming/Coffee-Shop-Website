@@ -1,0 +1,449 @@
+{
+  "info": {
+    "name": "Coffee Shop API - Test Collection",
+    "description": "Postman collection để test BRANCH & TABLE API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1️⃣ GET Branches (No Auth)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/api/branches",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "branches"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2️⃣ Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Admin User\",\n  \"email\": \"admin@test.com\",\n  \"password\": \"123456\",\n  \"phone\": \"0912345678\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/auth/register",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "auth", "register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3️⃣ Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  var jsonData = pm.response.json();",
+              "  pm.environment.set('token', jsonData.data.token);",
+              "  pm.environment.set('userId', jsonData.data._id);",
+              "  console.log('Token saved: ' + jsonData.data.token);",
+              "  console.log('User ID saved: ' + jsonData.data._id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@test.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/auth/login",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "auth", "login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4️⃣ Get Me (With Token)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/api/auth/me",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "auth", "me"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5️⃣ Create Branch",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  var jsonData = pm.response.json();",
+              "  pm.environment.set('branchId', jsonData.data._id);",
+              "  console.log('Branch ID saved: ' + jsonData.data._id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Chi nhánh Hà Nội\",\n  \"address\": \"123 Nguyễn Trãi, Hà Nội\",\n  \"phone\": \"0912345678\",\n  \"openTime\": \"07:00\",\n  \"closeTime\": \"23:00\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/branches",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "branches"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6️⃣ Get Branch By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/api/branches/{{branchId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "branches", "{{branchId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "7️⃣ Update Branch",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Chi nhánh Hà Nội - Updated\",\n  \"address\": \"456 Phạm Văn Đồng, Hà Nội\",\n  \"phone\": \"0987654321\",\n  \"openTime\": \"06:30\",\n  \"closeTime\": \"23:30\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/branches/{{branchId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "branches", "{{branchId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "8️⃣ Create Table 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  var jsonData = pm.response.json();",
+              "  pm.environment.set('tableId', jsonData.data._id);",
+              "  console.log('Table ID saved: ' + jsonData.data._id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tableNumber\": 1,\n  \"branch\": \"{{branchId}}\",\n  \"capacity\": 4,\n  \"status\": \"available\",\n  \"floor\": 1,\n  \"description\": \"Bàn gần cửa sổ\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "9️⃣ Create Table 2",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tableNumber\": 2,\n  \"branch\": \"{{branchId}}\",\n  \"capacity\": 6,\n  \"status\": \"available\",\n  \"floor\": 1,\n  \"description\": \"Bàn ăn nhóm\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "🔟 Get All Tables",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables?branch={{branchId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables"],
+          "query": [
+            {
+              "key": "branch",
+              "value": "{{branchId}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣0️⃣ Get Table By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables/{{tableId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables", "{{tableId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣1️⃣ Update Table Status → Occupied",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"occupied\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables/{{tableId}}/status",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables", "{{tableId}}", "status"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣2️⃣ Update Table Status → Reserved",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"reserved\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables/{{tableId}}/status",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables", "{{tableId}}", "status"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣3️⃣ Update Table Status → Available",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"available\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables/{{tableId}}/status",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables", "{{tableId}}", "status"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣4️⃣ Update Table",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"capacity\": 8,\n  \"floor\": 2,\n  \"description\": \"Bàn VIP - Updated\"\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables/{{tableId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables", "{{tableId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣5️⃣ Delete Table (Soft Delete)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/api/tables/{{tableId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "tables", "{{tableId}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "1️⃣6️⃣ Delete Branch (Soft Delete)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/api/branches/{{branchId}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["api", "branches", "{{branchId}}"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "branchId",
+      "value": ""
+    },
+    {
+      "key": "tableId",
+      "value": ""
+    }
+  ]
+}

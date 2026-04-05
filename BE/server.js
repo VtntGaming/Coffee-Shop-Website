@@ -7,6 +7,8 @@ const connectDB = require("./config/db");
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+const branchRoutes = require('./routes/branches');
+const tableRoutes = require('./routes/tables');
 
 // Khởi tạo app Express
 const app = express();
@@ -25,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/branches", branchRoutes);
+app.use("/api/tables", tableRoutes);
 
 // Route mặc định
 app.get("/", (req, res) => {
