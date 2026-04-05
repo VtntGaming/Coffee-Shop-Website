@@ -238,3 +238,47 @@ export async function fetchInventoryModuleData(): Promise<InventoryModuleData> {
     inventory,
   };
 }
+
+// ----------------------------------------------------
+// MUTATIONS (CRUD cho FE)
+// ----------------------------------------------------
+
+export async function createIngredientApi(data: Partial<BackendIngredient>) {
+  const res = await apiClient.post<ApiEnvelope<BackendIngredient>>('/ingredients', data);
+  return res.data.data;
+}
+
+export async function updateIngredientApi(id: string, data: Partial<BackendIngredient>) {
+  const res = await apiClient.put<ApiEnvelope<BackendIngredient>>(`/ingredients/${id}`, data);
+  return res.data.data;
+}
+
+export async function deleteIngredientApi(id: string) {
+  const res = await apiClient.delete(`/ingredients/${id}`);
+  return res.data;
+}
+
+export async function createSupplierApi(data: Partial<BackendSupplier>) {
+  const res = await apiClient.post<ApiEnvelope<BackendSupplier>>('/suppliers', data);
+  return res.data.data;
+}
+
+export async function updateSupplierApi(id: string, data: Partial<BackendSupplier>) {
+  const res = await apiClient.put<ApiEnvelope<BackendSupplier>>(`/suppliers/${id}`, data);
+  return res.data.data;
+}
+
+export async function deleteSupplierApi(id: string) {
+  const res = await apiClient.delete(`/suppliers/${id}`);
+  return res.data;
+}
+
+export async function importInventoryApi(data: { ingredient: string; branch: string; quantity: number; unitPrice: number; supplier?: string; note?: string }) {
+  const res = await apiClient.post('/inventory/import', data);
+  return res.data;
+}
+
+export async function exportInventoryApi(data: { ingredient: string; branch: string; quantity: number; note?: string }) {
+  const res = await apiClient.post('/inventory/export', data);
+  return res.data;
+}

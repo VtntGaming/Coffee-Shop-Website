@@ -13,7 +13,16 @@ import {
   Warehouse,
 } from 'lucide-react';
 import { Button, DataTable, Input, Modal, StatusBadge } from '../../components/common';
-import { fetchInventoryModuleData } from '../../services/inventoryService';
+import {
+  fetchInventoryModuleData,
+  createIngredientApi,
+  updateIngredientApi,
+  deleteIngredientApi,
+  createSupplierApi,
+  updateSupplierApi,
+  deleteSupplierApi,
+  importInventoryApi,
+} from '../../services/inventoryService';
 import type {
   BranchOption,
   Ingredient,
@@ -146,13 +155,7 @@ function toDatetimeLocalInputValue(isoValue: string): string {
   return new Date(parsedDate.getTime() - timezoneOffset).toISOString().slice(0, 16);
 }
 
-function fromDatetimeLocalInputValue(localValue: string): string {
-  if (!localValue) {
-    return new Date().toISOString();
-  }
 
-  return new Date(localValue).toISOString();
-}
 
 export function InventoryManagementPage() {
   const [activeTab, setActiveTab] = useState<InventoryTab>('inventory');
@@ -628,50 +631,54 @@ export function InventoryManagementPage() {
     setInventoryModalOpen(true);
   }
 
-  function handleDeleteIngredient(id: string) {
+  async function handleDeleteIngredient(id: string) {
     const shouldDelete = globalThis.confirm('Bạn có chắc chắn muốn xóa nguyên liệu này?');
     if (!shouldDelete) {
       return;
     }
 
-    setIngredients((prev) => prev.filter((item) => item.id !== id));
-    setInventory((prev) => prev.filter((item) => item.ingredientId !== id));
+    try {
+      await deleteIngredientApi(id);
+      void loadPageData();
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'Có lỗi xảy ra khi xóa nguyên liệu.');
+    }
   }
 
-  function handleDeleteSupplier(id: string) {
+  async function handleDeleteSupplier(id: string) {
     const shouldDelete = globalThis.confirm('Bạn có chắc chắn muốn xóa nhà cung cấp này?');
     if (!shouldDelete) {
       return;
     }
 
-    setSuppliers((prev) => prev.filter((item) => item.id !== id));
-  }
-
-  function handleDeleteInventory(id: string) {
-    const shouldDelete = globalThis.confirm('Bạn có chắc chắn muốn xóa dòng tồn kho này?');
-    if (!shouldDelete) {
-      return;
+    try {
+      await deleteSupplierApi(id);
+      void loadPageData();
+    } catch (err: any) {
+      alert(err?.response?.data?.message || 'Có lỗi xảy ra khi xóa nhà cung cấp.');
     }
-
-    setInventory((prev) => prev.filter((item) => item.id !== id));
   }
 
-  function handleRestock(item: InventoryItem) {
-    setInventory((prev) => prev.map((row) => {
-      if (row.id !== item.id) {
-        return row;
-      }
-
-      return {
-        ...row,
-        inStock: row.inStock + 10,
-        incoming: row.incoming > 9 ? row.incoming - 10 : 0,
-        lastRestockedAt: new Date().toISOString(),
-      };
-    }));
+  function handleDeleteInventory(_id: string) {
+    globalThis.alert('Không thể xóa dữ liệu tồn kho do tính toàn vẹn hệ thống. Vui lòng tạo phiếu xuất (export) hoặc điều chỉnh (adjust) để trừ kho.');
   }
 
-  function handleIngredientSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleRestock(item: InventoryItem) {
+    try {
+       await importInventoryApi({
+         ingredient: item.ingredientId,
+         branch: item.branchId,
+         quantity: 10,
+         unitPrice: 0,
+         note: 'Bổ sung tồn nhanh từ màn hình quản lý',
+       });
+       void loadPageData();
+    } catch (err: any) {
+       alert(err?.response?.data?.message || 'Lỗi khi nhập hàng bổ sung.');
+    }
+  }
+
+  async function handleIngredientSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIngredientFormError(null);
 
@@ -693,24 +700,27 @@ export function InventoryManagementPage() {
       return;
     }
 
-    const payload: Ingredient = {
-      id: editingIngredient?.id ?? `ing-${Date.now()}`,
-      name: ingredientForm.name.trim(),
-      category: ingredientForm.category.trim(),
-      unit: ingredientForm.unit.trim(),
-      minStock,
-      supplierId: ingredientForm.supplierId,
-      costPerUnit,
-      status: ingredientForm.status,
-    };
+    try {
+      const payload = {
+        name: ingredientForm.name.trim(),
+        description: ingredientForm.category.trim(),
+        unit: ingredientForm.unit.trim(),
+        minStock,
+        isActive: ingredientForm.status === 'active',
+      };
 
-    if (editingIngredient) {
-      setIngredients((prev) => prev.map((item) => (item.id === payload.id ? payload : item)));
-    } else {
-      setIngredients((prev) => [payload, ...prev]);
+      if (editingIngredient) {
+        await updateIngredientApi(editingIngredient.id, payload);
+      } else {
+        // Có thể lưu supplierId ở đây nếu backend support, nhưng theo model là ở Supplier hoặc Inventory.
+        await createIngredientApi(payload);
+      }
+
+      void loadPageData();
+      setIngredientModalOpen(false);
+    } catch (err: any) {
+      setIngredientFormError(err?.response?.data?.message || 'Có lỗi xảy ra khi lưu nguyên liệu.');
     }
-
-    setIngredientModalOpen(false);
   }
 
   function handleSupplierBranchToggle(branchId: string) {
@@ -731,7 +741,7 @@ export function InventoryManagementPage() {
     });
   }
 
-  function handleSupplierSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSupplierSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSupplierFormError(null);
 
@@ -757,27 +767,29 @@ export function InventoryManagementPage() {
       return;
     }
 
-    const payload: Supplier = {
-      id: editingSupplier?.id ?? `sup-${Date.now()}`,
-      name: supplierForm.name.trim(),
-      contactName: supplierForm.contactName.trim(),
-      phone: supplierForm.phone.trim(),
-      email: supplierForm.email.trim(),
-      branchIds: [...supplierForm.branchIds],
-      leadTimeDays,
-      status: supplierForm.status,
-    };
+    try {
+      const payload = {
+        name: supplierForm.name.trim(),
+        contactPerson: supplierForm.contactName.trim(),
+        phone: supplierForm.phone.trim(),
+        email: supplierForm.email.trim(),
+        isActive: supplierForm.status === 'active',
+      };
 
-    if (editingSupplier) {
-      setSuppliers((prev) => prev.map((item) => (item.id === payload.id ? payload : item)));
-    } else {
-      setSuppliers((prev) => [payload, ...prev]);
+      if (editingSupplier) {
+        await updateSupplierApi(editingSupplier.id, payload);
+      } else {
+        await createSupplierApi(payload);
+      }
+
+      void loadPageData();
+      setSupplierModalOpen(false);
+    } catch (err: any) {
+      setSupplierFormError(err?.response?.data?.message || 'Có lỗi xảy ra khi lưu nhà cung cấp.');
     }
-
-    setSupplierModalOpen(false);
   }
 
-  function handleInventorySubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleInventorySubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setInventoryFormError(null);
 
@@ -807,23 +819,20 @@ export function InventoryManagementPage() {
       return;
     }
 
-    const payload: InventoryItem = {
-      id: editingInventory?.id ?? `inv-${Date.now()}`,
-      branchId: inventoryForm.branchId,
-      ingredientId: inventoryForm.ingredientId,
-      inStock,
-      reserved,
-      incoming,
-      lastRestockedAt: fromDatetimeLocalInputValue(inventoryForm.lastRestockedAt),
-    };
+    try {
+      await importInventoryApi({
+        ingredient: inventoryForm.ingredientId,
+        branch: inventoryForm.branchId,
+        quantity: inStock, // Trong thực tế để chỉnh sửa tồn kho, chúng ta tạo một import/điều chỉnh với số chênh lệch
+        unitPrice: 0,
+        note: 'Điều chỉnh hệ thống',
+      });
 
-    if (editingInventory) {
-      setInventory((prev) => prev.map((item) => (item.id === payload.id ? payload : item)));
-    } else {
-      setInventory((prev) => [payload, ...prev]);
+      void loadPageData();
+      setInventoryModalOpen(false);
+    } catch (err: any) {
+      setInventoryFormError(err?.response?.data?.message || 'Lỗi cập nhật tồn kho');
     }
-
-    setInventoryModalOpen(false);
   }
 
   let searchPlaceholder = 'Tìm theo nguyên liệu hoặc chi nhánh...';
