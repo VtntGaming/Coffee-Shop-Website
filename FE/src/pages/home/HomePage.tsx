@@ -7,7 +7,8 @@
  * ============================================
  */
 import { Link } from 'react-router-dom';
-import { Coffee, MapPin, Clock, Star, ArrowRight, ShoppingBag } from 'lucide-react';
+import { Coffee, MapPin, Clock, Star, ArrowRight, ShoppingBag, LayoutDashboard, LogOut } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth';
 import './HomePage.css';
 
 /** Section giới thiệu sản phẩm nổi bật */
@@ -26,6 +27,8 @@ const branches = [
 ];
 
 export function HomePage() {
+  const { isAuthenticated, isAdmin, user, logout } = useAuth();
+
   return (
     <div className="home-page">
 
@@ -43,8 +46,26 @@ export function HomePage() {
           <a href="#about">Giới thiệu</a>
         </div>
         <div className="home-nav__actions">
-          <Link to="/login" className="home-nav__login">Đăng nhập</Link>
-          <Link to="/register" className="home-nav__cta">Bắt đầu</Link>
+          {isAuthenticated ? (
+            <>
+              <span className="home-nav__user">Xin chào, {user?.fullName}</span>
+              {isAdmin && (
+                <Link to="/admin" className="home-nav__cta">
+                  <LayoutDashboard size={16} />
+                  Trang quản trị
+                </Link>
+              )}
+              <button className="home-nav__login" onClick={logout}>
+                <LogOut size={16} />
+                Đăng xuất
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="home-nav__login">Đăng nhập</Link>
+              <Link to="/register" className="home-nav__cta">Bắt đầu</Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -63,13 +84,22 @@ export function HomePage() {
             đến khuyến mãi — tất cả trong một nền tảng duy nhất.
           </p>
           <div className="hero__actions">
-            <Link to="/register" className="hero__btn hero__btn--primary">
-              Dùng thử miễn phí
-              <ArrowRight size={18} />
-            </Link>
-            <Link to="/login" className="hero__btn hero__btn--ghost">
-              Đăng nhập
-            </Link>
+            {isAuthenticated && isAdmin ? (
+              <Link to="/admin" className="hero__btn hero__btn--primary">
+                Vào trang quản trị
+                <ArrowRight size={18} />
+              </Link>
+            ) : (
+              <>
+                <Link to="/register" className="hero__btn hero__btn--primary">
+                  Dùng thử miễn phí
+                  <ArrowRight size={18} />
+                </Link>
+                <Link to="/login" className="hero__btn hero__btn--ghost">
+                  Đăng nhập
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <div className="hero__visual">
@@ -182,10 +212,17 @@ export function HomePage() {
         <div className="cta-section__content">
           <h2>Sẵn sàng quản lý quán của bạn?</h2>
           <p>Đăng ký ngay hôm nay — hoàn toàn miễn phí trong 30 ngày đầu tiên.</p>
-          <Link to="/register" className="hero__btn hero__btn--primary">
-            Bắt đầu ngay
-            <ArrowRight size={18} />
-          </Link>
+          {isAuthenticated && isAdmin ? (
+            <Link to="/admin" className="hero__btn hero__btn--primary">
+              Vào trang quản trị
+              <ArrowRight size={18} />
+            </Link>
+          ) : (
+            <Link to="/register" className="hero__btn hero__btn--primary">
+              Bắt đầu ngay
+              <ArrowRight size={18} />
+            </Link>
+          )}
         </div>
       </section>
 
