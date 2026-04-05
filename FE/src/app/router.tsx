@@ -23,6 +23,7 @@ import { RegisterPage } from '../pages/auth/RegisterPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { HomePage } from '../pages/home/HomePage';
 import { BranchListPage } from '../pages/branches/BranchListPage';
+import { InventoryManagementPage } from '../pages/inventory/InventoryManagementPage';
 
 /**
  * Component bảo vệ route — chặn người chưa đăng nhập
@@ -96,6 +97,7 @@ const routes: RouteObject[] = [
     children: [
       { path: '/admin', element: <DashboardPage /> },
       { path: '/admin/branches', element: <BranchListPage /> },
+      { path: '/admin/inventory', element: <InventoryManagementPage /> },
       // Các trang admin khác sẽ thêm vào đây
     ],
   },

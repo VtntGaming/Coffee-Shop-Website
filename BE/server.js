@@ -2,23 +2,46 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const connectDB = require("./config/db");
 
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+// Người 4: Kho + Nguyên liệu
+const ingredientRoutes = require('./routes/ingredients');
+const supplierRoutes = require('./routes/suppliers');
+const inventoryRoutes = require('./routes/inventory');
 const branchRoutes = require('./routes/branches');
 const tableRoutes = require('./routes/tables');
 
 // Khởi tạo app Express
 const app = express();
 
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 // Kết nối MongoDB
 connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  origin: (origin, callback) => {
+    // Cho phép request không có Origin (Postman, curl, server-to-server)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -27,6 +50,17 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+// Người 4: Kho + Nguyên liệu
+app.use("/api/ingredients", ingredientRoutes);
+app.use("/api/suppliers", supplierRoutes);
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/categories", require("./routes/categories"));
+app.use("/api/products", require("./routes/products"));
+app.use("/api/orders", require("./routes/orders"));
+app.use("/api/vouchers", require("./routes/vouchers"));
+
+// Serve ảnh tĩnh
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/branches", branchRoutes);
 app.use("/api/tables", tableRoutes);
 
