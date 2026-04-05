@@ -1,6 +1,12 @@
 /**
  * ============================================
  * ROUTER — Cấu hình định tuyến cho toàn app
+ *
+ * Cách dùng:
+ *   import { router } from './app/router';
+ *   <RouterProvider router={router} />
+ *
+ * Team member khác muốn thêm route mới chỉ cần thêm vào đây.
  * ============================================
  */
 import {
@@ -18,9 +24,11 @@ import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { HomePage } from '../pages/home/HomePage';
 import { CategoryListPage } from '../pages/categories/CategoryListPage';
 import { ProductListPage } from '../pages/products/ProductListPage';
+import { InventoryManagementPage } from '../pages/inventory/InventoryManagementPage';
 
 /**
  * Component bảo vệ route — chặn người chưa đăng nhập
+ * Nếu chưa login → redirect sang /login
  */
 function ProtectedRoute() {
   const { isAuthenticated } = useAuth();
@@ -34,6 +42,7 @@ function ProtectedRoute() {
 
 /**
  * Redirect người đã đăng nhập khỏi trang login
+ * Nếu đã login → redirect sang /admin
  */
 function PublicRoute() {
   const { isAuthenticated } = useAuth();
@@ -46,7 +55,7 @@ function PublicRoute() {
 }
 
 /**
- * Trang 404
+ * Trang 404 — hiển thị khi route không tồn tại
  */
 function NotFoundPage() {
   return (
@@ -67,6 +76,9 @@ function NotFoundPage() {
   );
 }
 
+/**
+ * Định nghĩa tất cả routes
+ */
 const routes: RouteObject[] = [
   { path: '/', element: <HomePage /> },
   {
@@ -82,6 +94,7 @@ const routes: RouteObject[] = [
       { path: '/admin', element: <DashboardPage /> },
       { path: '/admin/categories', element: <CategoryListPage /> },
       { path: '/admin/products', element: <ProductListPage /> },
+      { path: '/admin/inventory', element: <InventoryManagementPage /> },
     ],
   },
   { path: '*', element: <NotFoundPage /> },

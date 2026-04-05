@@ -8,26 +8,52 @@ const connectDB = require("./config/db");
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
+// Người 4: Kho + Nguyên liệu
+const ingredientRoutes = require('./routes/ingredients');
+const supplierRoutes = require('./routes/suppliers');
+const inventoryRoutes = require('./routes/inventory');
 
 // Khởi tạo app Express
 const app = express();
+
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 // Kết nối MongoDB
 connectDB();
 
 // Middleware
-app.use(cors({
-  origin: (process.env.FRONTEND_URL || "http://localhost:3000").split(","),
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Cho phép request không có Origin (Postman, curl, server-to-server)
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true,
-}));
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+// Người 4: Kho + Nguyên liệu
+app.use("/api/ingredients", ingredientRoutes);
+app.use("/api/suppliers", supplierRoutes);
+app.use("/api/inventory", inventoryRoutes);
 app.use("/api/categories", require("./routes/categories"));
 app.use("/api/products", require("./routes/products"));
+app.use("/api/orders", require("./routes/orders"));
+app.use("/api/vouchers", require("./routes/vouchers"));
+app.use("/api/branches", require("./routes/brancches"));
 
 // Serve ảnh tĩnh
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

@@ -1,0 +1,94 @@
+/**
+ * ============================================
+ * GLOBAL STYLES — Design system cho toàn app
+ *
+ * Màu sắc theo coffee shop theme
+ * ============================================
+ */
+
+/* === CSS Variables — Design tokens === */
+:root {
+  /* Màu chính */
+  --color-primary: #8B5E3C;     /* Nâu cà phê */
+  --color-secondary: #C97C3D;   /* Cam đất */
+  --color-accent: #F4E7DA;      /* Kem nhạt */
+
+  /* Nền & text */
+  --color-bg: #F8F5F2;          /* Beige nhạt */
+  --color-text: #1F2937;        /* Xám đậm */
+  --color-border: #E5DDD5;      /* Nâu nhạt */
+
+  /* Trạng thái */
+  --color-success: #16A34A;     /* Xanh lá */
+  --color-warning: #D97706;     /* Cam */
+  --color-error: #DC2626;       /* Đỏ */
+}
+
+/* === Reset & Base === */
+*, *::before, *::after {
+  box-sizing: border-box; /* padding không làm tràn width */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* === Scrollbar tùy chỉnh === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+}
+
+/* === Utility — SR only (screen reader) === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

@@ -1,6 +1,10 @@
 /**
  * ============================================
  * SIDEBAR — Thanh điều hướng bên trái (dùng chung)
+ *
+ * Props:
+ *   isOpen: boolean — có đang mở không (mobile)
+ *   onClose: () => void — đóng sidebar (mobile)
  * ============================================
  */
 import { Link, useLocation } from 'react-router-dom';
@@ -34,6 +38,7 @@ interface SidebarProps {
 
 /**
  * Menu điều hướng chính
+ * Thêm/bớt mục theo tiến độ các module
  */
 const navItems: NavItem[] = [
   { label: 'Dashboard', to: '/admin', icon: <LayoutDashboard size={20} /> },
@@ -51,16 +56,20 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
 
   return (
     <>
+      {/* Overlay nền khi sidebar mở trên mobile */}
       {isOpen && onClose && (
         <div className="sidebar-overlay" onClick={onClose} />
       )}
 
+      {/* Sidebar chính */}
       <aside className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
+        {/* Logo + tên app */}
         <div className="sidebar__header">
           <div className="sidebar__brand">
             <Coffee size={24} />
             <span>Coffee Shop</span>
           </div>
+          {/* Nút đóng trên mobile */}
           {onClose && (
             <button className="sidebar__close" onClick={onClose}>
               <X size={20} />
@@ -68,6 +77,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
           )}
         </div>
 
+        {/* Danh sách menu */}
         <nav className="sidebar__nav">
           {navItems.map((item) => {
             const active = location.pathname === item.to;
@@ -80,6 +90,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
               >
                 <span className="sidebar__icon">{item.icon}</span>
                 <span className="sidebar__label">{item.label}</span>
+                {/* Mũi tên chỉ active */}
                 {active && <ChevronRight size={16} className="sidebar__arrow" />}
               </Link>
             );
