@@ -1,0 +1,94 @@
+/**
+ * ============================================
+ * CATEGORY FORM — Styles
+ * ============================================
+ */
+.cat-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cat-form__image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.cat-form__image-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  border: 2px dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.cat-form__preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cat-form__remove-img {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-form__no-image {
+  text-align: center;
+  color: #999;
+}
+
+.cat-form__no-image p {
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+.cat-form__description-area {
+  min-height: 80px;
+  padding: 8px;
+  resize: vertical;
+}
+
+.cat-form__status-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cat-form__status-group label {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cat-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.cat-form__error {
+  color: var(--color-error);
+  font-size: 13px;
+  text-align: center;
+}

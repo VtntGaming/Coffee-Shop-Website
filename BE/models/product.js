@@ -30,7 +30,6 @@ const productSchema = new mongoose.Schema({
   sizes: [{
     name: {
       type: String,
-      enum: ['S', 'M', 'L'],
       required: true
     },
     price: {
