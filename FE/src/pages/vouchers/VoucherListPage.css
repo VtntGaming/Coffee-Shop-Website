@@ -1,0 +1,135 @@
+/* ============================================
+   VOUCHER LIST PAGE STYLES
+   ============================================ */
+
+.vouchers-page {
+  padding: 0;
+}
+
+.vouchers-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.vouchers-page__title-group h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text, #1f2937);
+  margin: 0;
+}
+
+.vouchers-page__title-group p {
+  font-size: 14px;
+  color: #888;
+  margin: 4px 0 0;
+}
+
+.vouchers-page__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.vouchers-page__search {
+  flex: 1;
+  max-width: 360px;
+}
+
+.vouchers-page__table-wrapper {
+  overflow-x: auto;
+}
+
+/* Voucher code styling */
+.voucher-code {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--color-primary, #8b5e3c);
+  background: var(--color-accent, #f4e7da);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.voucher-period {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* Actions */
+.voucher-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.voucher-actions__btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 6px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.15s;
+}
+.voucher-actions__btn:hover {
+  background: var(--color-bg, #f8f5f2);
+  color: var(--color-primary, #8b5e3c);
+}
+
+.voucher-actions__btn--danger:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Voucher Form Styles */
+.voucher-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.voucher-form__error {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.voucher-form__row {
+  display: flex;
+  gap: 12px;
+}
+
+.voucher-form__row > * {
+  flex: 1;
+}
+
+.voucher-form__field {
+  flex: 1;
+}
+
+.voucher-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+/* Spin animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 1s linear infinite;
+}

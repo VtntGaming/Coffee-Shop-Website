@@ -1,0 +1,132 @@
+/* ============================================
+   LOGIN PAGE STYLES
+   ============================================ */
+
+/* Tiêu đề trang */
+.login-page__header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-page__title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 8px;
+}
+
+.login-page__subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+/* Thông báo lỗi */
+.login-page__error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  border: 1px solid #fecaca;
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Mỗi field trong form */
+.login-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-form__label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* Wrapper chứa icon + input */
+.login-form__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Input */
+.login-form__input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: #fff;
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+/* Icon bên trái */
+.login-form__input--icon {
+  padding-left: 42px;
+}
+
+/* Icon bên phải */
+.login-form__input--icon-right {
+  padding-right: 42px;
+}
+
+/* Icon bên trái (fixed position) */
+.login-form__icon {
+  position: absolute;
+  left: 14px;
+  color: #aaa;
+  pointer-events: none;
+}
+
+/* Focus state */
+.login-form__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.12);
+}
+
+/* Nút toggle hiện/ẩn password */
+.login-form__toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  transition: color 0.2s;
+}
+.login-form__toggle:hover {
+  color: var(--color-text);
+}
+
+/* Footer — link đăng ký */
+.login-page__footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+}
+
+.login-page__footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+.login-page__footer a:hover {
+  text-decoration: underline;
+}

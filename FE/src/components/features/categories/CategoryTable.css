@@ -1,0 +1,32 @@
+/**
+ * ============================================
+ * CATEGORY TABLE — Styles
+ * ============================================
+ */
+.cat-table__name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cat-table__img {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+.cat-table__name-text {
+  font-weight: 500;
+}
+
+.cat-table__description {
+  color: #666;
+  font-size: 13px;
+}
+
+.cat-table__actions {
+  display: flex;
+  gap: 8px;
+}
