@@ -27,23 +27,20 @@ const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
 connectDB();
 
 // Middleware
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
     // Cho phép request không có Origin (Postman, curl, server-to-server)
-    if (!origin) {
-      callback(null, true);
-      return;
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
 
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-      return;
-    }
-
-    callback(new Error(`CORS blocked for origin: ${origin}`));
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   credentials: true,
-}));
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -58,6 +55,7 @@ app.use("/api/categories", require("./routes/categories"));
 app.use("/api/products", require("./routes/products"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/vouchers", require("./routes/vouchers"));
+app.use("/api/branches", require("./routes/brancches"));
 
 // Serve ảnh tĩnh
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
