@@ -10,7 +10,6 @@ export interface Branch {
   name: string;
   address: string;
   phone?: string;
-  email?: string;
   openTime?: string;
   closeTime?: string;
   isActive: boolean;
@@ -23,7 +22,6 @@ export interface BranchPayload {
   name: string;
   address: string;
   phone?: string;
-  email?: string;
   openTime?: string;
   closeTime?: string;
   isActive: boolean;

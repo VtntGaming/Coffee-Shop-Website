@@ -131,9 +131,11 @@ export function BranchListPage() {
       } else {
         setError(response.message || 'Lỗi khi lưu chi nhánh');
       }
-    } catch (err) {
-      setError('Có lỗi xảy ra');
-      console.error(err);
+    } catch (err: any) {
+      // Hiển thị error message từ backend nếu có
+      const errorMsg = err?.response?.data?.message || err?.message || 'Có lỗi xảy ra';
+      setError(errorMsg);
+      console.error('Branch submit error:', err);
     } finally {
       setFormLoading(false);
     }
@@ -307,11 +309,6 @@ export function BranchListPage() {
                     {branch.phone && (
                       <p className="branch-card__info">
                         <strong>Điện thoại:</strong> {branch.phone}
-                      </p>
-                    )}
-                    {branch.email && (
-                      <p className="branch-card__info">
-                        <strong>Email:</strong> {branch.email}
                       </p>
                     )}
                     {branch.openTime && branch.closeTime && (
@@ -516,7 +513,6 @@ function BranchFormModal({
     name: '',
     address: '',
     phone: '',
-    email: '',
     openTime: '',
     closeTime: '',
     isActive: true,
@@ -540,31 +536,29 @@ function BranchFormModal({
       const [closeH] = closeDisplay.split(':');
       const closePeriod = closeDisplay.includes('CH') ? 'CH' : 'SA';
       
-      setOpenTimeDisplay(openH || '7');
+      setOpenTimeDisplay(openH || '07');
       setOpenTimePeriod(openPeriod as 'SA' | 'CH');
-      setCloseTimeDisplay(closeH || '10');
+      setCloseTimeDisplay(closeH || '22');
       setCloseTimePeriod(closePeriod as 'SA' | 'CH');
       
       setFormData({
         name: initialData.name,
         address: initialData.address,
         phone: initialData.phone || '',
-        email: initialData.email || '',
         openTime: initialData.openTime || '',
         closeTime: initialData.closeTime || '',
         isActive: initialData.isActive,
       });
     } else {
-      setOpenTimeDisplay('7');
+      setOpenTimeDisplay('07');
       setOpenTimePeriod('SA');
-      setCloseTimeDisplay('10');
+      setCloseTimeDisplay('22');
       setCloseTimePeriod('CH');
       
       setFormData({
         name: '',
         address: '',
         phone: '',
-        email: '',
         openTime: '',
         closeTime: '',
         isActive: true,
@@ -579,11 +573,20 @@ function BranchFormModal({
     const openTime24 = convertTo24hFormat(`${openTimeDisplay}:00 ${openTimePeriod}`);
     const closeTime24 = convertTo24hFormat(`${closeTimeDisplay}:00 ${closeTimePeriod}`);
     
-    await onSubmit({
-      ...formData,
+    const payload: any = {
+      name: formData.name.trim(),
+      address: formData.address.trim(),
       openTime: openTime24,
       closeTime: closeTime24,
-    });
+    };
+
+    // Only add optional fields if they have values
+    if (formData.phone?.trim()) {
+      payload.phone = formData.phone.trim();
+    }
+
+    console.log('BranchFormModal submitting:', payload);
+    await onSubmit(payload);
   }
 
   return (
@@ -634,34 +637,18 @@ function BranchFormModal({
           />
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="phone" className="form-label">
-              Điện thoại
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              className="form-input"
-              value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              placeholder="VD: 0909123456"
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="form-input"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="VD: branch@coffee.com"
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="phone" className="form-label">
+            Điện thoại
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            className="form-input"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            placeholder="VD: 0909123456"
+          />
         </div>
 
         <div className="form-row">
