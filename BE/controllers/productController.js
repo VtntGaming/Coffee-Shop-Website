@@ -82,10 +82,16 @@ exports.getProductBySlug = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const { name, description, category, price, sizes, isAvailable, isBestSeller, tags } = req.body;
+    const { name, description, category, categoryId, price, sizes, isAvailable, isActive, isBestSeller, tags, image } = req.body;
 
     const productData = {
-      name, description, category, price, isAvailable, isBestSeller
+      name, 
+      description, 
+      category: category || categoryId, 
+      price: price || (sizes && sizes[0] ? sizes[0].price : 0),
+      isAvailable: isAvailable !== undefined ? isAvailable : isActive,
+      isBestSeller,
+      image: image || null
     };
 
     if (sizes && typeof sizes === 'string') {

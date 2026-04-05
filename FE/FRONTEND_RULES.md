@@ -164,10 +164,10 @@ src/
 
 ## 13. Quy tắc đặt tên
 
-- `Component`: dùng **PascalCase**  
+- `Component`: dùng **PascalCase**
   Ví dụ: `ProductCard.tsx`, `DashboardLayout.tsx`
 
-- `Hook`: dùng **camelCase** và bắt đầu bằng `use`  
+- `Hook`: dùng **camelCase** và bắt đầu bằng `use`
   Ví dụ: `useAuth.ts`, `useProducts.ts`
 
 - `CSS class` / `style naming`: phải thống nhất và dễ đọc.

@@ -22,6 +22,8 @@ import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { HomePage } from '../pages/home/HomePage';
+import { CategoryListPage } from '../pages/categories/CategoryListPage';
+import { ProductListPage } from '../pages/products/ProductListPage';
 import { InventoryManagementPage } from '../pages/inventory/InventoryManagementPage';
 
 /**
@@ -78,10 +80,7 @@ function NotFoundPage() {
  * Định nghĩa tất cả routes
  */
 const routes: RouteObject[] = [
-  // ===== HOME — ai cũng vào được (trang công khai) =====
   { path: '/', element: <HomePage /> },
-
-  // ===== PUBLIC ROUTES — ai cũng vào được (chưa đăng nhập) =====
   {
     element: <PublicRoute />,
     children: [
@@ -89,23 +88,16 @@ const routes: RouteObject[] = [
       { path: '/register', element: <RegisterPage /> },
     ],
   },
-
-  // ===== PROTECTED ROUTES — cần đăng nhập =====
   {
     element: <ProtectedRoute />,
     children: [
       { path: '/admin', element: <DashboardPage /> },
+      { path: '/admin/categories', element: <CategoryListPage /> },
+      { path: '/admin/products', element: <ProductListPage /> },
       { path: '/admin/inventory', element: <InventoryManagementPage /> },
-      // Các trang admin khác sẽ thêm vào đây
     ],
   },
-
-  // ===== 404 =====
   { path: '*', element: <NotFoundPage /> },
 ];
 
-/**
- * Tạo router với createBrowserRouter
- * Dùng trong main.tsx: <RouterProvider router={router} />
- */
 export const router = createBrowserRouter(routes);

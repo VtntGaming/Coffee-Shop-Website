@@ -29,7 +29,7 @@ exports.getBranchById = async (req, res) => {
         return res.status(404).json({
             success: false,
             message: 'Chi nhánh không tồn tại'
-        }); 
+        });
     }
     // Kiểm tra nếu chi nhánh đã bị xóa
     res.status(200).json({
@@ -65,7 +65,7 @@ exports.createBranch = async (req, res) => {
             data: branch
         });
     } catch (error) {
-        // Kiểm tra lỗi duplicate 
+        // Kiểm tra lỗi duplicate
         if (error.code === 11000) {
             return res.status(400).json({
                 success: false,
@@ -116,7 +116,7 @@ exports.updateBranch = async (req, res) => {
 // DELETE / api/branches/:id - Xóa chi nhánh (thay đổi trạng thái isActive)
 exports.deleteBranch = async (req, res) => {
     try {
-        // Soft delete: chỉ set isActive = false, không xóa dữ liệu 
+        // Soft delete: chỉ set isActive = false, không xóa dữ liệu
         const branch = await Branch.findByIdAndUpdate(
             req.params.id,
             { isActive: false },

@@ -1,0 +1,63 @@
+/**
+ * ============================================
+ * CATEGORY LIST PAGE — Styles
+ * ============================================
+ */
+.categories-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.categories-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.categories-page__title-group h1 {
+  font-size: 24px;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.categories-page__title-group p {
+  color: #666;
+  font-size: 14px;
+  margin: 4px 0 0 0;
+}
+
+.categories-page__toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+  backgroundColor: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.categories-page__search {
+  flex: 1;
+  max-width: 400px;
+}
+
+.categories-page__table-wrapper {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
