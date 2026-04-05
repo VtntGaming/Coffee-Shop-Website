@@ -22,6 +22,7 @@ import { LoginPage } from '../pages/auth/LoginPage';
 import { RegisterPage } from '../pages/auth/RegisterPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { HomePage } from '../pages/home/HomePage';
+import { BranchListPage } from '../pages/branches/BranchListPage';
 import { CategoryListPage } from '../pages/categories/CategoryListPage';
 import { ProductListPage } from '../pages/products/ProductListPage';
 import { InventoryManagementPage } from '../pages/inventory/InventoryManagementPage';
@@ -92,6 +93,7 @@ const routes: RouteObject[] = [
     element: <ProtectedRoute />,
     children: [
       { path: '/admin', element: <DashboardPage /> },
+      { path: '/admin/branches', element: <BranchListPage /> },
       { path: '/admin/categories', element: <CategoryListPage /> },
       { path: '/admin/products', element: <ProductListPage /> },
       { path: '/admin/inventory', element: <InventoryManagementPage /> },

@@ -28,22 +28,40 @@ const seedDB = async () => {
     // Tạo Admin user
     const existingAdmin = await User.findOne({ email: 'admin@coffee.com' });
     if (!existingAdmin) {
-      await User.create({
-        fullName: 'Admin',
+      const admin = await User.create({
+        fullName: 'Admin Coffee',
         email: 'admin@coffee.com',
         password: '123456',
-        phone: '0901234567',
+        phone: '0912345678',
         role: adminRole._id
       });
-      console.log('Admin user created');
+      console.log('Admin user created:', admin.email);
+    }
+
+    // Tạo Admin test user cho Postman
+    const existingTestAdmin = await User.findOne({ email: 'admin@test.com' });
+    if (!existingTestAdmin) {
+      const testAdmin = await User.create({
+        fullName: 'Admin User',
+        email: 'admin@test.com',
+        password: '123456',
+        phone: '0912345678',
+        role: adminRole._id
+      });
+      console.log('Test admin user created:', testAdmin.email, '(role: ADMIN)');
     } else {
-      console.log('Admin user already exists');
+      // Nếu user đã tồn tại nhưng không phải ADMIN, update lại role
+      if (!existingTestAdmin.role || existingTestAdmin.role.toString() !== adminRole._id.toString()) {
+        existingTestAdmin.role = adminRole._id;
+        await existingTestAdmin.save();
+        console.log('Test admin user role updated to ADMIN');
+      }
     }
 
     mongoose.disconnect();
-    console.log('Seed completed');
+    console.log('✅ Seed completed!');
   } catch (error) {
-    console.error('Seed error:', error);
+    console.error('❌ Seed error:', error);
     mongoose.disconnect();
   }
 };

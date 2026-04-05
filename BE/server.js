@@ -12,6 +12,8 @@ const userRoutes = require('./routes/users');
 const ingredientRoutes = require('./routes/ingredients');
 const supplierRoutes = require('./routes/suppliers');
 const inventoryRoutes = require('./routes/inventory');
+const branchRoutes = require('./routes/branches');
+const tableRoutes = require('./routes/tables');
 
 // Khởi tạo app Express
 const app = express();
@@ -53,10 +55,10 @@ app.use("/api/categories", require("./routes/categories"));
 app.use("/api/products", require("./routes/products"));
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/vouchers", require("./routes/vouchers"));
-app.use("/api/branches", require("./routes/brancches"));
-
 // Serve ảnh tĩnh
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/branches", branchRoutes);
+app.use("/api/tables", tableRoutes);
 
 // Route mặc định
 app.get("/", (req, res) => {
